@@ -750,8 +750,6 @@ void Photino::SetFullScreen(bool fullScreen)
 	{
 		style |= WS_POPUP;
 		style &= (~WS_OVERLAPPEDWINDOW);
-		SetPosition(0, 0);
-		SetSize(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 	}
 	else
 	{
@@ -759,6 +757,11 @@ void Photino::SetFullScreen(bool fullScreen)
 		style &= (~WS_POPUP);
 	}
 	SetWindowLongPtr(_hWnd, GWL_STYLE, style);
+	if (fullScreen)
+	{
+		SetPosition(0, 0);
+		SetSize(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+	}
 }
 
 void Photino::SetIconFile(AutoString filename)
