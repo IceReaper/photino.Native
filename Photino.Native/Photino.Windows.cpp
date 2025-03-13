@@ -168,6 +168,7 @@ Photino::Photino(PhotinoInitParams* initParams)
 
 	_transparentEnabled = initParams->Transparent;
 	_contextMenuEnabled = initParams->ContextMenuEnabled;
+	_zoomEnabled = initParams->ZoomEnabled;
 	_devToolsEnabled = initParams->DevToolsEnabled;
 	_grantBrowserPermissions = initParams->GrantBrowserPermissions;
 	_mediaAutoplayEnabled = initParams->MediaAutoplayEnabled;
@@ -542,6 +543,13 @@ void Photino::GetContextMenuEnabled(bool* enabled)
 	settings->get_AreDefaultContextMenusEnabled((BOOL*)enabled);
 }
 
+void Photino::GetZoomEnabled(bool* enabled)
+{
+    ICoreWebView2Settings* settings;
+    HRESULT r = _webviewWindow->get_Settings(&settings);
+    settings->get_IsZoomControlEnabled((BOOL*)enabled);
+}
+
 void Photino::GetDevToolsEnabled(bool* enabled)
 {
 	ICoreWebView2Settings* settings;
@@ -717,6 +725,14 @@ void Photino::SetContextMenuEnabled(bool enabled)
 	HRESULT r = _webviewWindow->get_Settings(&settings);
 	settings->put_AreDefaultContextMenusEnabled(enabled);
 	_webviewWindow->Reload();
+}
+
+void Photino::SetZoomEnabled(bool enabled)
+{
+    ICoreWebView2Settings* settings;
+    HRESULT r = _webviewWindow->get_Settings(&settings);
+    settings->put_IsZoomControlEnabled(enabled);
+    _webviewWindow->Reload();
 }
 
 void Photino::SetDevToolsEnabled(bool enabled)
@@ -1108,6 +1124,9 @@ void Photino::AttachWebView()
 
 						if (_contextMenuEnabled == false)
 							SetContextMenuEnabled(false);
+
+						if (_zoomEnabled == false)
+							SetZoomEnabled(false);
 
 						if (_devToolsEnabled == false)
 							SetDevToolsEnabled(false);
